@@ -1,0 +1,4 @@
+n,train_precision_pos,train_recall_pos,train_f1_pos,dev_precision_pos,dev_recall_pos,dev_f1_pos
+10,1.0,1.0,1.0,1.0,0.5714285714285714,0.7272727272727273
+50,1.0,1.0,1.0,1.0,1.0,1.0
+160,1.0,1.0,1.0,1.0,1.0,1.0

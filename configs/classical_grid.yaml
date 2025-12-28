@@ -1,0 +1,5 @@
+# Example config for grid search (not used in quick mode)
+logreg:
+  C: [0.1, 1, 10]
+bernoulli_nb:
+  alpha: [0.1, 1, 10]

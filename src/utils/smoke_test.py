@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .seed import set_seed
-from .logger import get_logger
-from .device import get_device
-from .metrics import compute_metrics
-from .io import save_table
-from .plots import save_plot
+from src.utils.seed import set_seed
+from src.utils.logger import get_logger
+from src.utils.device import get_device
+from src.utils.metrics import compute_metrics
+from src.utils.io import save_table
+from src.utils.plots import save_plot
 
 def main():
     set_seed(123)
