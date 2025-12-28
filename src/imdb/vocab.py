@@ -64,11 +64,26 @@ if __name__ == "__main__":
 
     train, _ = load_imdb_data(quick=args.quick)
     tokenized = preprocess_texts(train['text'])
+    # Lowercase vocab for consistency with vectorizer
+    def to_lower(v):
+        return [w.lower() for w in v]
     df = compute_df(tokenized)
     most_common, least_common = remove_top_bottom(df, args.n, args.k)
     filtered_vocab = [w for w in df if w not in most_common and w not in least_common]
+    filtered_vocab = to_lower(filtered_vocab)
     igs = compute_ig(tokenized, train['label'].tolist(), filtered_vocab)
     vocab = select_top_m_ig(igs, args.m)
+    vocab = to_lower(vocab)
+    # Bulletproof: ensure vocab contains at least one token present in at least one tokenized train doc
+    def vocab_present_in_tokenized(vocab, tokenized_docs):
+        return any(any(w == t for t in doc for w in vocab) for doc in tokenized_docs)
+    if (len(vocab) == 0 or not vocab_present_in_tokenized(vocab, tokenized)):
+        print("WARNING: Vocab is empty or not present in any doc after filtering. Falling back to most common present token.")
+        present_tokens = [w.lower() for w, _ in df.most_common() if any(w.lower() in [t for t in doc] for doc in tokenized)]
+        if present_tokens:
+            vocab = [present_tokens[0]]
+        else:
+            raise RuntimeError("No token in the training set is present in any document after tokenization. Cannot build non-empty vocabulary. Check your thresholds and data.")
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     save_vocab(vocab, args.out)
     print(f"Saved vocab of size {len(vocab)} to {args.out}")

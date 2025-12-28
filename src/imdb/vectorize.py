@@ -2,9 +2,12 @@ import numpy as np
 import scipy.sparse as sp
 
 def vectorize(tokenized_texts, vocab):
+    # Lowercase everything for consistency
+    vocab = [w.lower() for w in vocab]
     word2idx = {w: i for i, w in enumerate(vocab)}
     rows, cols, data = [], [], []
     for row, doc in enumerate(tokenized_texts):
+        doc = [w.lower() for w in doc]
         for w in set(doc):
             if w in word2idx:
                 rows.append(row)

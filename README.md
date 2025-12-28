@@ -1,69 +1,53 @@
-# ML Assignment Project
+# Assignment 2: IMDB & FashionMNIST
 
-## Setup (macOS, Apple Silicon)
+## Quick Start
 
-### 1. Install Python 3.9+ (recommended: 3.10)
-
-### 2. Create virtual environment
-
-```
+```sh
 python3 -m venv .venv
 source .venv/bin/activate
-```
-
-### 3. Install requirements
-
-```
 pip install -r requirements.txt
-```
-
-## Run Smoke Test
-
-```
-python -m src.utils.smoke_test
-```
-
-## Run All Checks
-
-```
+bash scripts/run_all.sh --quick
 pytest -q
 ```
 
-## Project Structure
+## Full Run
 
-- src/utils/ : Core utilities (seed, logger, device, metrics, io, plots, smoke_test)
-- configs/ : Config files
-- outputs/ : Results (plots, tables, checkpoints)
-- report/ : Reports
-- scripts/ : Helper scripts
-- tests/ : Pytest-based tests
-
-## Acceptance Checklist
-
-- `python -m src.utils.smoke_test` creates:
-  - outputs/tables/smoke_metrics.csv
-  - outputs/plots/smoke_plot.png
-- `pytest -q` passes all tests
-- metrics.py computes per-class + micro/macro metrics deterministically
-
----
-
-## VERIFICATION
-
-### Commands to Run
-
+```sh
+bash scripts/run_all.sh
 ```
-python -m src.utils.smoke_test
+
+## Verification
+
+- To verify all outputs and report are generated:
+
+```sh
+bash scripts/run_all.sh --quick
 pytest -q
 ```
 
-### Expected Outputs
+### Expected Output Artifacts
 
-- outputs/tables/smoke_metrics.csv (CSV with columns: class, precision, recall, f1, support)
-- outputs/plots/smoke_plot.png (non-empty PNG file)
-- All tests in tests/ pass (no errors)
+- outputs/plots/imdb_learning_curves_logreg.png
+- outputs/plots/imdb_learning_curves_bernoulli_nb.png
+- outputs/tables/imdb_test_results_logreg.csv
+- outputs/tables/imdb_test_results_bernoulli_nb.csv
+- outputs/plots/imdb_rnn_loss_curves.png
+- outputs/tables/imdb_rnn_test_results.csv
+- outputs/plots/fashion_loss_curves.png
+- outputs/tables/fashion_test_results.csv
+- report/assignment2_report.md
 
-### PASS/FAIL Criteria
+## Structure
 
-- **PASS**: Both files above are created, contain valid data, and all tests pass.
-- **FAIL**: Any file missing, empty, or any test fails.
+- src/: all code
+- tests/: all tests (pytest)
+- configs/: config files
+- outputs/: generated artifacts
+- report/: generated report
+- scripts/: run scripts
+
+## Notes
+
+- All pipelines support --quick for fast smoke/e2e tests.
+- All code runs as modules (python -m ...).
+- No manual PYTHONPATH needed (pytest.ini included).
