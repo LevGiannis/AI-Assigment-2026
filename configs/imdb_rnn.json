@@ -1,0 +1,11 @@
+{
+  "embedding_dim": 100,
+  "hidden_dim": 32,
+  "num_layers": 2,
+  "dropout": 0.2,
+  "batch_size": 8,
+  "max_len": 20,
+  "lr": 0.001,
+  "epochs": 10,
+  "seed": 42
+}

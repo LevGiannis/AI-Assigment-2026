@@ -22,7 +22,7 @@ def test_cli_artifacts(tmp_path):
     ], check=True)
     # Eval test
     subprocess.run([
-        sys.executable, "-m", "src.imdb.eval_test", "--model", "logreg", "--quick", "--vocab", str(vocab_path)
+        sys.executable, "-m", "src.imdb.evaluate", "--model", "logreg", "--quick", "--vocab", str(vocab_path)
     ], check=True)
     # Check artifacts
     assert len(glob.glob("outputs/tables/imdb_dev_gridsearch.csv")) == 1
