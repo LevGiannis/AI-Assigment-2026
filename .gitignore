@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+
+# Virtual env
+.venv/
+
+# OS
+.DS_Store
+
+# Outputs / artifacts
+outputs/
+report/*.html
+
+# Data (downloaded datasets)
+data/

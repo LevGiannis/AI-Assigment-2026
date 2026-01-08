@@ -1,129 +1,12 @@
 
+# Assignment 2: IMDB & FashionMNIST
 
-# Assignment 2: IMDB & FashionMNIST - Ολοκληρωμένο ML Pipeline
-
-## Περιγραφή Project
-Αυτό το repository υλοποιεί ένα πλήρως αυτοματοποιημένο και αναπαραγώγιμο ML pipeline για ταξινόμηση κειμένου (IMDB) και εικόνας (FashionMNIST), με έμφαση στη modular αρχιτεκτονική, την επαληθευσιμότητα και την αυτοματοποίηση ελέγχων/αποτελεσμάτων.
-
-### Κύρια μέρη:
-- **Μέρος Α: IMDB Classic**
-	- Προεπεξεργασία, IG-based λεξιλόγιο, custom vectorizer
-	- Εκπαίδευση Logistic Regression & BernoulliNB
-	- Learning curves, αξιολόγηση, αυτόματη παραγωγή πινάκων/plots
-- **Μέρος Β: IMDB RNN**
-	- RNN (LSTM/GRU) με pre-trained GloVe embeddings
-	- Custom DataLoader, training loop, loss curves, αξιολόγηση
-- **Μέρος Γ: FashionMNIST CNN**
-	- Εκπαίδευση CNN σε FashionMNIST
-	- Training/validation/test split, loss curves, αξιολόγηση
-
-Όλα τα pipelines υποστηρίζουν quick mode για ταχύτατο smoke test & πλήρη mode για κανονικά πειράματα.
-
----
-
-## Δομή Φακέλων & Κώδικα
-
-- **src/**: Όλος ο πηγαίος κώδικας
-	- **imdb/**: Κλασικά μοντέλα, vectorizer, vocab, training, evaluation, learning curves
-	- **rnn_imdb/**: RNN, embeddings, custom DataLoader, training/evaluation
-	- **fashion/**: CNN, data loaders, training/evaluation
-	- **utils/**: Κοινές βοηθητικές συναρτήσεις (metrics, plots, io, logger, seed, device)
-	- **make_report.py**: Αυτόματη παραγωγή markdown αναφοράς με όλα τα αποτελέσματα/plots
-- **configs/**: Όλα τα config files (YAML/JSON) για reproducibility & εύκολη παραμετροποίηση
-- **outputs/**: Παράγονται αυτόματα (plots, tables, checkpoints)
-- **report/**: Η τελική αναφορά (assignment2_report.md)
-- **scripts/**: Εκτελέσιμα scripts για πλήρη/quick pipeline
-- **tests/**: Πλήρες suite ελέγχων (pytest)
-
----
-
-## Πλήρης Ροή Pipeline & Scripts
-
-Όλη η ροή εκτελείται με:
-
-```sh
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-bash scripts/run_all.sh --quick   # ή χωρίς --quick για πλήρη run
-pytest -q                        # για αυτόματο έλεγχο όλων των pipelines
-```
-
-Το `scripts/run_all.sh` εκτελεί διαδοχικά:
-1. **IMDB Classic**: Δημιουργία λεξιλογίου (IG), εκπαίδευση logreg/nb, learning curves, αξιολόγηση
-2. **IMDB RNN**: Εκπαίδευση & αξιολόγηση RNN με GloVe embeddings
-3. **FashionMNIST CNN**: Εκπαίδευση & αξιολόγηση CNN
-4. **Αυτόματη παραγωγή αναφοράς**: Δημιουργεί το `report/assignment2_report.md` με όλα τα αποτελέσματα/plots
-
-Όλα τα scripts CLI τρέχουν ως modules (π.χ. `python -m src.imdb.train_classical ...`).
-
----
-
-## Αναλυτική Περιγραφή Pipelines
-
-### Μέρος Α: IMDB Classic (src/imdb)
-- **Vocab/IG**: Δημιουργία λεξιλογίου με IG, αφαίρεση συχνών/σπάνιων, bulletproof fallback για quick mode
-- **Vectorizer**: Custom, συμβατός με pre-tokenized input, πλήρως reproducible
-- **Training**: Εκπαίδευση logreg/nb με GridSearchCV, αποθήκευση μοντέλων, παραγωγή learning curves
-- **Evaluation**: Αυτόματη παραγωγή πινάκων metrics (csv/markdown), plots
-- **Quick mode**: Εγγυημένα X_train.shape[1] ≥ 1, robust fallback, πλήρης έλεγχος με tests
-
-### Μέρος Β: IMDB RNN (src/rnn_imdb)
-- **DataLoader**: Custom, με tokenization, padding, split
-- **Embeddings**: Φόρτωση GloVe, fallback για quick mode
-- **Model**: RNN (LSTM/GRU), bidirectional, dropout, training loop
-- **Evaluation**: Αποθήκευση loss curves, test metrics, plots
-
-### Μέρος Γ: FashionMNIST CNN (src/fashion)
-- **DataLoader**: Custom split (train/dev/test), reproducible seed
-- **Model**: CNN, training loop, early stopping
-- **Evaluation**: Αποθήκευση loss curves, test metrics, plots
-
----
-
-## Testing & Reproducibility
-
-- Όλα τα pipelines έχουν πλήρη κάλυψη με tests (tests/)
-- Υπάρχει end-to-end test (test_end_to_end_quick.py) που τρέχει όλο το pipeline σε quick mode και ελέγχει artifacts, features, outputs
-- Όλα τα scripts ελέγχονται ως modules (python -m ...)
-- Τα tests καλύπτουν: training, evaluation, metrics, data splits, CLI, artifacts, reproducibility
-- Το pytest.ini διασφαλίζει σωστό PYTHONPATH (δεν χρειάζεται export)
-
----
-
-## Παραγόμενα Αρχεία & Αναφορά
-
-Μετά την εκτέλεση:
-- **outputs/plots/**: Όλα τα γραφήματα (learning/loss curves, αρχιτεκτονικές)
-- **outputs/tables/**: Όλα τα αποτελέσματα (csv)
-- **outputs/checkpoints/**: Checkpoints μοντέλων
-- **report/assignment2_report.md**: Αυτόματη markdown αναφορά με όλα τα αποτελέσματα/plots
-
-Η αναφορά παράγεται αυτόματα από το script `src/make_report.py` και περιλαμβάνει όλα τα αποτελέσματα, plots, πίνακες, hyperparameters, datasets, reproducibility info.
-
----
-
-## Dependencies
-
-Όλες οι βασικές βιβλιοθήκες περιγράφονται στο requirements.txt:
-- numpy, pandas, scikit-learn, matplotlib
-- torch, torchvision
-- pytest, tabulate
-
----
-
-## Χρήσιμα Tips & Troubleshooting
-
-- Όλα τα scripts τρέχουν ως modules (python -m ...)
-- Δεν απαιτείται χειροκίνητο PYTHONPATH (βλ. pytest.ini)
-- Τα configs είναι yaml/json για εύκολη παραμετροποίηση
-- Αν κάποιο artifact λείπει, τρέξε `bash scripts/run_all.sh --quick`
-- Για debugging, δες τα logs/outputs σε κάθε script
-
----
-
-## Επικοινωνία
-Για απορίες/σχόλια, επικοινώνησε με τον συγγραφέα της εργασίας.
+## Περιγραφή
+Αυτό το project υλοποιεί pipelines για επεξεργασία και ταξινόμηση κειμένου (IMDB) και εικόνας (FashionMNIST) με κλασικές και νευρωνικές μεθόδους. Περιλαμβάνει:
+- Κλασική επεξεργασία κειμένου IMDB (Logistic Regression, BernoulliNB)
+- RNN για IMDB
+- CNN για FashionMNIST
+- Αυτόματη παραγωγή αναφοράς και γραφημάτων
 
 ## Δομή Φακέλων
 - **src/**: Όλος ο πηγαίος κώδικας
@@ -153,6 +36,25 @@ pytest -q                        # για αυτόματο έλεγχο όλων
 	 ```sh
 	 bash scripts/run_all.sh
 	 ```
+
+## Linux σημειώσεις (προτεινόμενος τρόπος εκτέλεσης)
+- **Tests (σταθερά σε Linux):**
+	```sh
+	.venv/bin/python -m pytest tests/
+	```
+
+- **Quick end-to-end (χωρίς εξωτερικό GloVe):**
+	```sh
+	PYTHON=.venv/bin/python bash scripts/run_all.sh --quick
+	```
+
+- **Full end-to-end (με πραγματικό GloVe):**
+	```sh
+	export GLOVE_PATH=/path/to/glove.6B.100d.txt
+	PYTHON=.venv/bin/python bash scripts/run_all.sh
+	```
+
+Σημείωση: Το `scripts/run_all.sh` υποστηρίζει τη μεταβλητή `PYTHON` (ώστε να χρησιμοποιεί το venv) και το `GLOVE_PATH` για το IMDB RNN σε full mode.
 
 ## Pipelines
 Το script `scripts/run_all.sh` εκτελεί διαδοχικά:
